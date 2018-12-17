@@ -20,4 +20,6 @@ js图片另存为，在chrome上确实玩不转了，chrome现在不支持将url
 * 跨域，服务端支持cors，通过canvas转换为base64进行下载
 * 跨域，服务端支持cors，通过fetch获取blob进行下载
 
-> 注意：通过fetch下载时，chrome会提示[不安全的脚本](https://support.google.com/chrome/answer/99020?p=unauthenticated&visit_id=636806410731401727-3641021513&rd=1#content)，所以需要信任一下才能正常下载。
+通过fetch下载时，chrome会提示[不安全的脚本](https://support.google.com/chrome/answer/99020?p=unauthenticated&visit_id=636806410731401727-3641021513&rd=1#content)，需要信任一下才能正常下载。
+
+所以最终还是建议通过canvas转换为base64的方式来下载。
