@@ -9,6 +9,7 @@ js图片另存为，在chrome上确实玩不转了，chrome现在不支持将url
 唯一的办法就是将图片url转化为base64或者ObjectURL，有两种转化方法：
 
 1、canvas
+
 2、fetch或者xhr
 
 但是这两种方法都有跨域限制，所以只能后端提供支持cors了。
