@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>download</title>
+    <style>
+        input {
+            display: block;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <p>
+        <button id="download">download</button>
+        <button id="download2">download url without cors</button>
+        <button id="download3">download url with cors in canvas</button>
+        <button id="download4">download url with cors in fetch</button>
+    </p>
+    <script>
+        (function() {
+            let input = document.getElementById('input');
+            let button = document.getElementById('download');
+            let button2 = document.getElementById('download2');
+            let button3 = document.getElementById('download3');
+            let button4 = document.getElementById('download4');
+            let download = url => {
+                let link = document.createElement('a');
+                let ext;
+                if (/^data\:/i.test(url) || /^blob\:/i.test(url)) {
+                    ext = '.png';
+                } else {
+                    ext = url.substr(url.lastIndexOf('.'));
+                }
+                link.href = url;
+                link.download = 'download' + ext;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            let createClickHandler = url => {
+                return e => {
+                    return download(url);
+                };
+            };
+            let getDataUrl = url => {
+                return new Promise((resolve, reject) => {
+                    let image = new Image();
+                    image.setAttribute('crossOrigin', 'Anonymous');
+                    image.onload = () => {
+                        let canvas = document.createElement('canvas');
+                        let context = canvas.getContext('2d');
+                        context.drawImage(image, 0, 0);
+                        resolve(canvas.toDataURL('image/png'));
+                    };
+                    image.src = url;
+                });
+            };
+            let clicker3 = () => {
+                getDataUrl('http://hushicai.github.io/img/scrollup.png').then(dataUrl => {
+                    return download(dataUrl);
+                });
+            };
+            let clicker4 = () => {
+                fetch('http://hushicai.github.io/css/images/banner.jpg', {
+                    headers: new Headers({
+                        'Origin': location.origin
+                    }),
+                    mode: 'cors'
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    return download(window.URL.createObjectURL(blob));
+                });
+            };
+            button.onclick = createClickHandler('/test.txt');
+            button2.onclick = createClickHandler('https://www.baidu.com/favicon.ico');
+            button3.onclick = clicker3;
+            button4.onclick = clicker4;
+        })();
+    </script>
+</body>
+</html>
